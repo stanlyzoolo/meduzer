@@ -26,7 +26,7 @@ SECRET_KEY = "oa-4&50+)i^ay*kvj_!as=_yfaf7)n!&sp6@cj=^uy2wfock35"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["meduzer.herokuapp.com"]
 
 # Application definition
 
