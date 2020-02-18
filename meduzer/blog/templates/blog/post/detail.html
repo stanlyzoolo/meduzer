@@ -3,7 +3,7 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-  <h1>{{ post.title }}</h1>
+  <h3>{{ post.title }}</h3>
   <p class="date">
     Опубликовано {{ post.publish }} : {{ post.author }}
   </p>
@@ -21,28 +21,28 @@
     Похожих статей не найдено.
   {% endfor %}
   {% with comments.count as total_comments %}
-    <h2> {{ total_comments }} comment {{ total_comments|pluralize }}</h2>
+    <h2> {{ total_comments }} Комментарий {{ total_comments|pluralize }}</h2>
   {% endwith %}
   {% for comment in comments %}
     <div class="comment">
       <p class="info">
-        Comment {{ forloop.counter }} by {{ comment.name }}
+        Комментарий {{ forloop.counter }} от {{ comment.name }}
         {{ comment.created }}
       </p>
       {{ comment.body|linebreaks }}
     </div>
   {% empty %}
-    <p>There are no comments yet.</p>
+    <p>Комментариев еще нет.</p>
   {% endfor %}
 
   {% if new_comment %}
-    <h2>Your comment has been added.</h2>
+    <h3>Комментарий добавлен.</h3>
   {% else %}
-    <h2>Add a new comment</h2>
+    <h2>Оставьте Ваш комментарий</h2>
     <form action="." method="post">
       {{ comment_form.as_p }}
       {% csrf_token %}
-      <p><input type="submit" value="Add comment"></p>
+      <p><input type="submit" value="Добавить комментарий"></p>
     </form>
   {% endif %}
 {% endblock %}
