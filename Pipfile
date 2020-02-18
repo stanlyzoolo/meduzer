@@ -9,3 +9,4 @@ black = "==19.10b0"
 [packages]
 django = "*"
 whitenoise = "*"
+django-taggit = "*"
