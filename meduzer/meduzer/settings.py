@@ -23,12 +23,12 @@ PROJECT_DIR = BASE_DIR/"meduzer"
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "oa-4&50+)i^ay*kvj_!as=_yfaf7)n!&sp6@cj=^uy2wfock35"
+SECRET_KEY = _settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _settings.DEBUG
 
-ALLOWED_HOSTS = ["meduzer.herokuapp.com"]
+ALLOWED_HOSTS = _settings.ALLOWED_HOSTS
 
 # Application definition
 
