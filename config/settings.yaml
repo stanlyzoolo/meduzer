@@ -1,0 +1,19 @@
+default:
+  ALLOWED_HOSTS: []
+  DATABASE_URL: ""
+  DEBUG: true
+  SECRET_KEY: ""
+
+
+development:
+  ALLOWED_HOSTS:
+    - 127.0.0.1
+    - localhost
+  DEBUG: true
+
+heroku:
+  ALLOWED_HOSTS:
+    - 127.0.0.1
+    - localhost
+    - meduzer.herokuapp.com
+  DEBUG: false

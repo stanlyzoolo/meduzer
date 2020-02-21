@@ -10,3 +10,6 @@ black = "==19.10b0"
 django = "*"
 whitenoise = "*"
 django-taggit = "*"
+psycopg2-binary = "*"
+dynaconf = {extras = ["yaml"],version = "*"}
+dj-database-url = "*"
