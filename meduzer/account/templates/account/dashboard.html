@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <h3>Учетная запись</h3>
+  <p>Добро пожаловать в Вашу учетную запись.
+      Вы можете <a href="{% url "edit" %}">отредактировать Ваш профиль</a> или <a href="{% url "password_change" %}">изменить Ваш пароль</a>.</p>
+{% endblock %}

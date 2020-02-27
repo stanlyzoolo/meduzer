@@ -33,6 +33,7 @@ ALLOWED_HOSTS = _settings.ALLOWED_HOSTS
 # Application definition
 SITE_ID = 1
 INSTALLED_APPS = [
+    "account.apps.AccountConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,7 +62,7 @@ ROOT_URLCONF = "meduzer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [PROJECT_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -125,3 +126,7 @@ EMAIL_HOST_USER = "stanlyzoolo@gmail.com"
 EMAIL_HOST_PASSWORD = "vovka51088"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
