@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from pathlib import Path
 import dj_database_url
+from django.urls import reverse_lazy
 from dynaconf import settings as _settings
 
 BASE_DIR = Path(__file__).parent.parent.resolve()
@@ -127,6 +128,9 @@ EMAIL_HOST_PASSWORD = "vovka51088"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = reverse_lazy("blog:post_list")
 LOGIN_URL = "login"
 LOGOUT_URL = "logout"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")

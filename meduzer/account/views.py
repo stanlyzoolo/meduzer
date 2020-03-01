@@ -1,32 +1,27 @@
-from django.http import HttpResponse, request
+from django.http import HttpResponse, request, HttpRequest
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
-
-
-def user_login(request):
-    if request.method == "POST":
-        form = LoginForm(request.Post)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(
-                request, username=cd["username"], password=cd["password"]
-            )
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponse("Аутентификация прошла успешно")
-            else:
-                return HttpResponse("Несуществующая учетная запись")
-        else:
-            return HttpResponse("Неверное имя пользователя")
-    else:
-        form = LoginForm()
-    return render(request, "account/login.html", {"form": form})
+from .forms import UserRegistrationForm
 
 
 @login_required
 def dashboard(request):
     return render(request, "account/dashboard.html", {"section": dashboard})
+
+
+def register(request: HttpRequest):
+    if request.method == "POST":
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            # создание нового врача
+            new_user = user_form.save(commit=False)
+            # присвоение зашифрованного пароля пользователю
+            new_user.set_password(user_form.cleaned_data["password"])
+            # сэйв в базе
+            new_user.save()
+            return render(request, "account/register_done.html", {"new_user": new_user})
+    else:
+        user_form = UserRegistrationForm()
+    return render(request, "account/register.html", {"user_form": user_form})
