@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
+from .models.userbio import UserBio
 
 
 @login_required
@@ -21,6 +22,9 @@ def register(request: HttpRequest):
             new_user.set_password(user_form.cleaned_data["password"])
             # сэйв в базе
             new_user.save()
+
+            bio = UserBio(user=new_user, )
+            bio.save()
             return render(request, "account/register_done.html", {"new_user": new_user})
     else:
         user_form = UserRegistrationForm()
