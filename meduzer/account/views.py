@@ -8,7 +8,7 @@ from .forms import UserRegistrationForm
 
 @login_required
 def dashboard(request):
-    return render(request, "account/dashboard.html", {"section": dashboard})
+    return render(request, "account/dashboard.html", {"section": "dashboard"})
 
 
 def register(request: HttpRequest):
@@ -16,19 +16,9 @@ def register(request: HttpRequest):
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
             # создание нового врача
-            new_user = user_form.save()
-            new_user.refresh_from_db()
-            # ub = UserBio(user=new_user, **user_form.cleaned_data)
-            # ub.save()
-            new_user.UserBio.avatar_bio = user_form.cleaned_data.get("avatar_bio")
-            new_user.UserBio.first_name = user_form.cleaned_data.get("first_name")
-            new_user.UserBio.last_name = user_form.cleaned_data.get("last_name")
-            new_user.UserBio.place_of_study = user_form.cleaned_data("place_of_study")
-            new_user.UserBio.place_of_work = user_form.cleaned_data("place_of_work")
-            new_user.save()
-            username = new_user.cleaned_data["username"]
-            password = new_user.cleaned_data["password1"]
-
+            user_form.save()
+            username = user_form.cleaned_data["username"]
+            password = user_form.cleaned_data["password1"]
             new_user = authenticate(request, username=username, password=password)
             login(request, new_user)
             return render(request, "account/register_done.html", {"new_user": new_user})

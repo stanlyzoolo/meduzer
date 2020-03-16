@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db import models
+
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
 from meduzer.account.models.place_of_study import PlaceOfStudy
@@ -16,11 +17,16 @@ class UserBio(models.Model):
     place_of_study = forms.ModelChoiceField(
         queryset=PlaceOfStudy.objects.all(),
         required=False,
-        label="Выберите образование", null=True
+        label="Выберите образование",
+        null=True,
     )
     place_of_work = forms.ModelChoiceField(
-        queryset=PlaceOfWork.objects.all(), required=False, label="Место работы", null=True
+        queryset=PlaceOfWork.objects.all(),
+        required=False,
+        label="Место работы",
+        null=True,
     )
+
 
 #
 # # метод, который создает User, если создан объект UserBio
