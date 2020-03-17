@@ -120,6 +120,8 @@ STATIC_ROOT = STATIC_ROOT_DIR.as_posix()
 
 STATIC_URL = "/static/"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
 STATICFILES_DIRS = [PROJECT_DIR / "static"]
 
 EMAIL_HOST = "smtp.gmail.com"
@@ -127,10 +129,8 @@ EMAIL_HOST_USER = "stanlyzoolo@gmail.com"
 EMAIL_HOST_PASSWORD = "vovka51088"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_REDIRECT_URL = reverse_lazy("blog:post_list")
 LOGIN_URL = "login"
 LOGOUT_URL = "logout"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
