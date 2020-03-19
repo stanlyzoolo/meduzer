@@ -14,3 +14,6 @@ psycopg2-binary = "*"
 dynaconf = {extras = ["yaml"],version = "*"}
 dj-database-url = "*"
 markdown = "*"
+blog = "*"
+pillow = "*"
+social-auth-app-django = "*"

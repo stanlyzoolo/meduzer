@@ -66,6 +66,16 @@
                       {% endif %}
                     </span>
                 </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">
+                                {{ message|safe }}
+                                    <a href="#" class="close">x</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
 
                 <div class="col col-sm-md-lg-xl-auto">
                     <div class="frase" style="vertical-align: middle">
@@ -81,122 +91,7 @@
                             Стетоскоп должен быть с хорошей мембранкой! (с)
                     </div>
                 </div>
-
-                <div class="col-3 col-sm-md-lg-xl-auto" style="text-align: right">
-                    <button type="button" class="btn rounded" data-toggle="modal" data-target="#staticBackdrop">
-
-                        <!-- Кнопка Входа-->
-                        <style scoped type="text/css">
-                            .btn {
-                                color: wheat;
-                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Times, serif;
-                                font-size: 15px;
-                                background-color:#2c3952;
-                                text-align: center;
-                                border: 1px solid wheat;
-
-                            }
-
-                            .btn:hover {
-                                background-color:wheat;
-
-                            }
-                        </style>
-
-                        Войти
-
-                    </button>
-                    <div class="modal fade" id="staticBackdrop" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <style scoped type="text/css">
-                                        .modal-header {
-                                            background-color: wheat;
-                                            color: #2c3952;
-                                            border-bottom: 1px solid #2c3952;
-                                        }
-                                    </style>
-
-                                    <h5 class="modal-title" id="staticBackdropLabel">Войти с помощью</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <style scoped type="text/css">
-                                        .modal-body {
-                                            color:#2c3952;
-                                            background-color:wheat;
-                                        }
-                                    </style>
-                                    <form>
-                                        <div class="form-group row" style="background-color: wheat">
-                                            <label for="staticEmail" class="col-sm-2 col-form-label">
-                                                Email
-                                            </label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputEmail" placeholder="email@example.com">
-                                                <style scoped type="text/css">
-                                                    .form-control {
-                                                        background-color: whitesmoke;
-                                                        border: 1px solid #2c3952;
-                                                    }
-                                                </style>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" style="background-color: wheat">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
-                                            <div class="col-sm-10">
-                                                <input type="password" class="form-control" id="inputPassword" placeholder="Пароль электронной почты">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="Забыли пароль?" style="text-align: left; color:#2c3952; margin-left: 15px">Забыли пароль?</a>
-                                        <style scoped type="text/css">
-                                            .modal-footer {
-                                                color: #2c3952;
-                                                background-color: wheat;
-                                                border-top: 1px solid #2c3952;
-                                            }
-                                        </style>
-                                    <button type="button" class="btn rounded" style="border: 1px solid #2c3952; margin-left: 5px">Регистрация</button>
-                                    <button type="button" class="btn rounded" data-dismiss="modal" style="border: 1px solid #2c3952">Войти</button>
-                                    <hr class="my-4">
-                                    <button class="btn btn-lg btn-google btn-block rounded" type="submit" style="border: 1px solid #2c3952"><i class="fab fa-google mr-2"></i> Войти с помощью Google</button>
-                                    <button class="btn btn-lg btn-facebook btn-block rounded" type="submit" style="border: 1px solid #2c3952"><i class="fab fa-facebook-f mr-2"></i> Войти с помощью Facebook</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="btn rounded" href="http://127.0.0.1:8000/account/register/">
-
-                        <!-- Кнопка регистрации-->
-                        <style scoped type="text/css">
-                            .btn {
-                                color: wheat;
-                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Times, serif;
-                                font-size: 15px;
-                                background-color:#2c3952;
-                                text-align: center;
-                                margin-top: 20px;
-                                margin-bottom: 15px;
-                                border: 1px solid wheat;
-                            }
-
-                            .btn:hover::before {
-                                background-color:wheat;
-
-                            }
-
-                        </style>
-                        Регистрация
-                    </a>
-
-                </div>
-            </div>
+        </div>
         </div>
 </header>
 <body>
