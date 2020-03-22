@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список тегов - {{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+    <h3 class="mb-5">Теги:</h3>
+
+    {% for tag in tags %}
+        <h3><a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a></h3>
+    {% endfor %}
+
+{% endblock %}

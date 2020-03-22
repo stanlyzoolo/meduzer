@@ -1,124 +1,145 @@
-from django.core.mail import send_mail
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
-from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm, SearchForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render
+from django.views.generic.base import View
 from taggit.models import Tag
-from django.db.models import Count
-from django.contrib.postgres.search import (
-    SearchVector,
-    SearchQuery,
-    SearchRank,
-    TrigramSimilarity,
-)
+
+from .forms import PostForm, TagForm
+from .models import Post
+from .utils import ObjectCreateMixin, ObjectDetailMixin
 
 
-def post_list(request, tag_slug=None):
-    object_list = Post.published.all()
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        object_list = object_list.filter(tags__in=[tag])
-    paginator = Paginator(object_list, 3)
-    page = request.GET.get("page")
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(
-        request, "blog/post/list.html", {"page": page, "posts": posts, "tag": tag}
-    )
+def posts_list(request):
+    search_query = request.GET.get("search", "")
 
-
-def post_detail(request, year, month, day, post):
-    post = get_object_or_404(
-        Post,
-        slug=post,
-        status="published",
-        publish__year=year,
-        publish__month=month,
-        publish__day=day,
-    )
-    comments = post.comments.filter(active=True)
-    new_comment = None
-    if request.method == "POST":
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            # Создание комментария без сохранения в базе данных
-            new_comment = comment_form.save(commit=False)
-            # Привязка комментария к текущей статье
-            new_comment.post = post
-            # Сохранение комментария в базе данных
-            new_comment.save()
+    if search_query:
+        posts = Post.objects.filter(
+            Q(title_icontains=search_query) | Q(body__icontains=search_query)
+        )
     else:
-        comment_form = CommentForm()
-    # Формирование списка похожих статей
-    post_tags_ids = post.tags.values_list("id", flat=True)
-    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
-        "-same_tags", "-publish"
-    )[:4]
-    return render(
-        request,
-        "blog/post/detail.html",
-        {
-            "post": post,
-            "comments": comments,
-            "new_comment": new_comment,
-            "comment_form": comment_form,
-            "similar_posts": similar_posts,
-        },
-    )
+        posts = Post.objects.all()
 
+    paginator = Paginator(posts, 10)
 
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = "posts"
-    paginate_by = 3
-    template_name = "blog/post/list.html"
+    page_number = request.GET.get("page", 1)
+    page = paginator.get_page(page_number)
 
+    is_paginated = page.has_other_pages()
 
-def post_share(request, post_id):
-    post = get_object_or_404(Post, id=post_id, status="published")
-    sent = False
-    if request.method == "POST":
-        form = EmailPostForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            post_url = request.build_absolute_uri(post.get_absolute_url())
-            subject = '{}({}) рекомендуется для прочтения "{}"'.format(
-                cd["name"], cd["email"], post.title
-            )
-            message = 'Прочитать "{}" от {}\n\n{}`s comments:{}'.format(
-                post.title, post_url, cd["name"], cd["comments"]
-            )
-            send_mail(subject, message, "admin@myblog.com", [cd["to"]])
-            sent = True
+    if page.has_previous():
+        prev_url = f"?page={page.previous_page_number()}"
     else:
-        form = EmailPostForm()
-    return render(
-        request, "blog/post/share.html", {"post": post, "form": form, "sent": sent}
-    )
+        prev_url = ""
+
+    if page.has_next():
+        next_url = f"?page={page.next_page_number()}"
+    else:
+        next_url = ""
+
+    context = {
+        "page_object": page,
+        "is_paginated": is_paginated,
+        "prev_url": prev_url,
+        "next_url": next_url,
+    }
+
+    return render(request, "blog/post/list.html", context=context)
 
 
-def post_search(request):
-    form = SearchForm()
-    query = None
-    results = []
-    if "query" in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data["query"]
-            results = (
-                Post.objects.annotate(similarity=TrigramSimilarity("title", query),)
-                .filter(similarity__gt=0.3)
-                .order_by("-similarity")
-            )
-    return render(
-        request,
-        "blog/post/search.html",
-        {"form": form, "query": query, "results": results},
-    )
+class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model_form = PostForm
+    template = "blog/post/post_create_form.html"
+    raise_exception = True
+
+
+class PostDetail(ObjectDetailMixin, View):
+    model = Post
+    template = "blog/post/detail.html"
+
+
+class PostUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Post
+    model_form = PostForm
+    template = "blog/post_update_form.html"
+    raise_exception = True
+
+
+class PostDelete(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Post
+    template = "post_delete_form.html"
+    redirect_url = "posts_list_url"
+    raise_exception = True
+
+
+# def post_share(request, post_id):
+#     post = get_object_or_404(Post, id=post_id)
+#     sent = False
+#     if request.method == "POST":
+#         form = EmailPostForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             post_url = request.build_absolute_uri(post.get_absolute_url())
+#             subject = '{}({}) рекомендуется для прочтения "{}"'.format(
+#                 cd["name"], cd["email"], post.title
+#             )
+#             message = 'Прочитать "{}" от {}\n\n{}`s comments:{}'.format(
+#                 post.title, post_url, cd["name"], cd["comments"]
+#             )
+#             send_mail(subject, message, "admin@myblog.com", [cd["to"]])
+#             sent = True
+#     else:
+#         form = EmailPostForm()
+#     return render(
+#         request, "blog/post/share.html", {"post": post, "form": form, "sent": sent}
+#     )
+
+
+# def post_search(request):
+#     form = SearchForm()
+#     query = None
+#     results = []
+#     if "query" in request.GET:
+#         form = SearchForm(request.GET)
+#         if form.is_valid():
+#             query = form.cleaned_data["query"]
+#             results = (
+#                 Post.objects.annotate(similarity=TrigramSimilarity("title", query), )
+#                     .filter(similarity__gt=0.3)
+#                     .order_by("-similarity")
+#             )
+#     return render(
+#         request,
+#         "blog/post/search.html",
+#         {"form": form, "query": query, "results": results},
+#     )
+
+
+class TagDetail(ObjectCreateMixin, View):
+    model = Tag
+    template = "blog/tags/tag_detail.html"
+
+
+class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model_form = TagForm
+    template = "blog/tags/tag_create.html"
+    raise_exception = True
+
+
+class TagUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Tag
+    model_form = TagForm
+    template = "blog/tags/tag_update_form.html"
+    raise_exception = True
+
+
+class TagDelete(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Tag
+    template = "blog/tags/tag_delete_form.html"
+    redirect_url = "tags_list_url"
+    raise_exception = True
+
+
+def tags_list(request):
+    tags = Tag.objects.all()
+    return render(request, "blog/tags/tags_list.html", context={"tags": tags})

@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
-
-
 {% block title %}
-    Список публикаций
+    {{ tag.title }} - {{ block.super }}
 {% endblock %}
 
+
 {% block content %}
-    <h1 class="mb-5">Posts:</h1>
-    {% for post in page_object.object_list %}
+    <h3 class="mb-5">Публикации с тегом: "{{ tag.title|title }}"</h3>
+
+    {% for post in tag.posts.all %}
         {% include 'blog/includes/post_card_template.html' %}
     {% endfor %}
+
+
 {% endblock %}

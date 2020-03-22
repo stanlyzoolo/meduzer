@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .models import Profile
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, LoginForm
@@ -18,7 +18,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse("Авторизация прошла успешно")
+                    return HttpResponseRedirect("blog:list", request)
                 else:
                     return HttpResponse("Несуществующая учетная запись")
             else:

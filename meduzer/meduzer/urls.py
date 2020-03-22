@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
+
 sitemaps = {
     "posts": PostSitemap,
 }
@@ -12,7 +13,7 @@ sitemaps = {
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
-    path("blog/", include("blog.urls", namespace="blog")),
+    path("blog/", include("blog.urls")),
     path(
         "sitemap.xml",
         sitemap,

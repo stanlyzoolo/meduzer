@@ -132,13 +132,14 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-LOGIN_REDIRECT_URL = reverse_lazy("blog:post_list")
+LOGIN_REDIRECT_URL = reverse_lazy("blog:posts_list_url")
+LOGOUT_REDIRECT_URL = reverse_lazy("blog:posts_list_url")
 LOGIN_URL = "login"
 LOGOUT_URL = "logout"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "account,authentication.EmailAuthBackend",
+    "account.authentication.EmailAuthBackend",
     "social_core.backends.facebook.FacebookOAuth2",
     "social_core.backends.twitter.TwitterOAuth",
     "social_core.backends.google.GoogleOAuth2",

@@ -2,45 +2,33 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-from taggit.managers import TaggableManager
-
-
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super(PublishedManager, self).get_queryset().filter(status="published")
 
 
 class Post(models.Model):
-    STATUS_CHOICES = (
-        ("draft", "Draft"),
-        ("published", "Published"),
-    )
-    title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250, unique_for_date="publish")
+    title = models.CharField(max_length=250, db_index=True)
+    slug = models.SlugField(max_length=250, unique=True)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="blog_posts"
     )
-    body = models.TextField()
+    body = models.TextField(blank=True, db_index=True)
+    tags = models.ManyToManyField("Tag", blank=True, related_name="posts")
     publish = models.DateTimeField(default=timezone.now)
-    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
 
-    objects = models.Manager()
-    published = PublishedManager()
-    tags = TaggableManager()
+    def get_absolute_url(self):
+        return reverse("blog:post_detail_url", kwargs={"slug": self.slug})
+
+    def get_update_url(self):
+        return reverse("post_update_url", kwargs={"slug": self.slug})
+
+    def get_delete_url(self):
+        return reverse("post_delete_url", kwargs={"slug": self.slug})
 
     class Meta:
         ordering = ("-publish",)
 
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse(
-            "blog:post_detail",
-            args=[self.publish.year, self.publish.month, self.publish.day, self.slug],
-        )
 
 
 class Comment(models.Model):
@@ -57,3 +45,23 @@ class Comment(models.Model):
 
     def __str__(self):
         return "Комментарий от {} к публикации {}".format(self.name, self.post)
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+
+    def get_absolute_url(self):
+        return reverse("tag_detail_url", kwargs={"slug": self.slug})
+
+    def get_update_url(self):
+        return reverse("tag_update_url", kwargs={"slug": self.slug})
+
+    def get_delete_url(self):
+        return reverse("tag_delete_url", kwargs={"slug": self.slug})
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        ordering = ["title"]
