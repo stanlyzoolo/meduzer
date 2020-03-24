@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Создать тег - {{ block.super }}
+    Создание метки - {{ block.super }}
 {% endblock %}
 
 {% block content %}
 
-    <form action="{% url 'tag_create_url' %}" method="post">
+    <form action="{% url 'blog:tag_create_url' %}" method="post">
         {% csrf_token %}
 
         {% for field in form %}
@@ -23,7 +23,7 @@
 
         {% endfor %}
 
-        <button type="submit" class="btn btn-primary">Создать тег</button>
+        <button type="submit" class="btn btn-primary">Создать метку</button>
     </form>
 
 

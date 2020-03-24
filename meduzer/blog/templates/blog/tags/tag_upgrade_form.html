@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Редактировать тег: "{{ tag.title|title }}" - {{ block.super }}
+    Редактировать метку: "{{ tag.title|title }}" - {{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -23,7 +23,7 @@
 
         {% endfor %}
 
-        <button type="submit" class="btn btn-primary">Обновить тег</button>
+        <button type="submit" class="btn btn-primary">Обновить метку</button>
     </form>
 
 

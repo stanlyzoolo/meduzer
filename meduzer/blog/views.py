@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic.base import View
 from taggit.models import Tag
 
@@ -11,11 +12,13 @@ from .utils import ObjectCreateMixin, ObjectDetailMixin
 
 
 def posts_list(request):
+    # Пустые ковычки заданы на случай, если в поле поиска ничего не введено
     search_query = request.GET.get("search", "")
-
+    # Если запрос есть - организуем поиск по названию и телу поста
+    # _icontains - указывает на содержимое для поиска
     if search_query:
         posts = Post.objects.filter(
-            Q(title_icontains=search_query) | Q(body__icontains=search_query)
+            Q(title__icontains=search_query) | Q(body__icontains=search_query)
         )
     else:
         posts = Post.objects.all()
@@ -40,11 +43,10 @@ def posts_list(request):
     context = {
         "page_object": page,
         "is_paginated": is_paginated,
-        "prev_url": prev_url,
         "next_url": next_url,
+        "prev_url": prev_url,
     }
-
-    return render(request, "blog/post/list.html", context=context)
+    return render(request, "blog/post/post_list.html", context=context)
 
 
 class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
@@ -55,21 +57,51 @@ class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
 
 class PostDetail(ObjectDetailMixin, View):
     model = Post
-    template = "blog/post/detail.html"
+    template = "blog/post/post_detail.html"
 
 
 class PostUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
     model = Post
     model_form = PostForm
-    template = "blog/post_update_form.html"
+    template = "blog/post/post_update_form.html"
     raise_exception = True
 
 
 class PostDelete(LoginRequiredMixin, ObjectCreateMixin, View):
     model = Post
-    template = "post_delete_form.html"
+    template = "blog/post/post_delete_form.html"
     redirect_url = "posts_list_url"
     raise_exception = True
+
+
+class TagDetail(ObjectCreateMixin, View):
+    model = Tag
+    template = "blog/tags/tag_detail.html"
+
+
+class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model_form = TagForm
+    template = "blog/tags/tag_create.html"
+    raise_exception = True
+
+
+class TagUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Tag
+    model_form = TagForm
+    template = "blog/tags/tag_update_form.html"
+    raise_exception = True
+
+
+class TagDelete(LoginRequiredMixin, ObjectCreateMixin, View):
+    model = Tag
+    template = "blog/tags/tag_delete_form.html"
+    redirect_url = "tags_list_url"
+    raise_exception = True
+
+
+def tags_list(request):
+    tags = Tag.objects.all()
+    return render(request, "blog/tags/tags_list.html", context={"tags": tags})
 
 
 # def post_share(request, post_id):
@@ -113,33 +145,3 @@ class PostDelete(LoginRequiredMixin, ObjectCreateMixin, View):
 #         "blog/post/search.html",
 #         {"form": form, "query": query, "results": results},
 #     )
-
-
-class TagDetail(ObjectCreateMixin, View):
-    model = Tag
-    template = "blog/tags/tag_detail.html"
-
-
-class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
-    model_form = TagForm
-    template = "blog/tags/tag_create.html"
-    raise_exception = True
-
-
-class TagUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
-    model = Tag
-    model_form = TagForm
-    template = "blog/tags/tag_update_form.html"
-    raise_exception = True
-
-
-class TagDelete(LoginRequiredMixin, ObjectCreateMixin, View):
-    model = Tag
-    template = "blog/tags/tag_delete_form.html"
-    redirect_url = "tags_list_url"
-    raise_exception = True
-
-
-def tags_list(request):
-    tags = Tag.objects.all()
-    return render(request, "blog/tags/tags_list.html", context={"tags": tags})

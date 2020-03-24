@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Удалить тег: "{{ tag.title|title }}" - {{ block.super }}
+    Удалить метку: "{{ tag.title|title }}" - {{ block.super }}
  {% endblock %}
 
 
@@ -10,7 +10,7 @@
     <form action="{{ tag.get_delete_url }}" method="post">
         {% csrf_token %}
 
-        <h3>Вы действительно хотите удалить тег: <b>"{{ tag.title|title }}"</b></h3>
+        <h3>Вы действительно хотите удалить метку: <b>"{{ tag.title|title }}"</b></h3>
         <a href="{{ tag.get_absolute_url }}">Отменить</a>
         <button type="submit" name="button" class="btn btn-danger">Удалить</button>
 

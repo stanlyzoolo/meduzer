@@ -32,7 +32,7 @@ class ObjectCreateMixin:
         bound_form = self.model_form(request.POST)
 
         if bound_form.is_valid():
-            new_obj = bound_form.save(commit=False)
+            new_obj = bound_form.save()
             new_obj.author = request.user
             new_obj.save()
             return redirect(new_obj)

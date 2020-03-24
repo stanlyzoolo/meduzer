@@ -1,24 +1,24 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Comment, Post, Tag
+from .models import Post, Tag
 
 
-class EmailPostForm(forms.Form):
-    name = forms.CharField(max_length=25)
-    email = forms.EmailField()
-    to = forms.EmailField()
-    comments = forms.CharField(required=False, widget=forms.Textarea)
+# class EmailPostForm(forms.Form):
+#     name = forms.CharField(max_length=25)
+#     email = forms.EmailField()
+#     to = forms.EmailField()
+#     comments = forms.CharField(required=False, widget=forms.Textarea)
 
 
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ("name", "email", "body")
+# class CommentForm(forms.ModelForm):
+#     class Meta:
+#         model = Comment
+#         fields = ("body",)
 
 
-class SearchForm(forms.Form):
-    query = forms.CharField()
+# class SearchForm(forms.Form):
+#     query = forms.CharField()
 
 
 class TagForm(forms.Form):
@@ -40,6 +40,7 @@ class TagForm(forms.Form):
             raise ValidationError(
                 f"Slug должен быть уникальным. {new_slug} уже существует."
             )
+        return new_slug
 
 
 class PostForm(forms.ModelForm):
@@ -49,8 +50,8 @@ class PostForm(forms.ModelForm):
         fields = ["title", "slug", "body", "tags"]
 
         widgets = {
-            "title": forms.TextInput(),
-            "slug": forms.TextInput(),
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "slug": forms.TextInput(attrs={"class": "form-control"}),
             "body": forms.Textarea(attrs={"class": "form-control"}),
             "tags": forms.SelectMultiple(attrs={"class": "form-control"}),
         }

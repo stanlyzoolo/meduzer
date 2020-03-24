@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/400d095706.js" crossorigin="anonymous"></script>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Medbrain{% endblock %}</title>
 </head>
 <header>
        <div class='container'>
@@ -101,7 +101,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">В начало<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="{% url 'blog:posts_list_url' %}">В начало (не работатет)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">О проекте</a>
@@ -114,15 +114,15 @@
                             <a class="dropdown-item" href="#">Такой то ресурс</a>
                             <a class="dropdown-item" href="#">Другой то ресурс</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Может помочь вот это</a>
+                            <a class="dropdown-item" href="{% url 'blog:tags_list_url'%}">Ссылка на теги (не работает)</a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Попробовать вот это</a>
                     </li>
                     </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Quae invenire vis?" aria-label="Search">
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'blog:posts_list_url' %}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Quae invenire vis?" aria-label="Search" name="search">
                         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Найти</button>
                     </form>
                 </div>
@@ -139,10 +139,51 @@
 
             <div class="col-md-9 shadow rounded">
                 {% block content %}
+
                 {% endblock %}
+                {% if is_paginated %}
+
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li class="page-item {% if not prev_url %} disabled {% endif %}">
+                                <a class="page-link" href="{{ prev_url }}" tabindex="-1">Previous</a>
+                            </li>
+
+                            {% for n in page_object.paginator.page_range %}
+
+                                {% if page_object.number == n %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                                    </li>
+                                {% elif n > page_object.number|add:-3 and n < page_object.number|add:3 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="page-item {% if not next_url %} disabled {% endif %}">
+                                <a class="page-link" href="{{ next_url }}" tabindex="-1">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                {% endif %}
             </div>
             <div class="col-md shadow rounded" style="margin-left: 15px">
-                Оставить пустым
+                {% if request.user.is_authenticated %}
+                    <ul class="list-group">
+                        <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                            <a href="{% url "dashboard" %}"> Учетная запись, {{ request.user.first_name }}</a>
+                        </li>
+                        <li {% if section == "images" %}class="selected"{% endif %}>
+                            <a href="#">Задействовать для чего нибудь</a>
+                        </li>
+                        <li {% if section == "people" %}class="selected"{% endif %}>
+                            <a href="#">Вставить ссылку на редактирование профиля</a>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -4,9 +4,8 @@
     {{ tag.title }} - {{ block.super }}
 {% endblock %}
 
-
 {% block content %}
-    <h3 class="mb-5">Публикации с тегом: "{{ tag.title|title }}"</h3>
+    <h3 class="mb-5">Публикация с меткой: "{{ tag.title|title }}"</h3>
 
     {% for post in tag.posts.all %}
         {% include 'blog/includes/post_card_template.html' %}

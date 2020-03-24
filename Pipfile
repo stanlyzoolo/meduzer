@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 black = "==19.10b0"
+pylint = "*"
 
 [packages]
 django = "*"
@@ -17,3 +18,4 @@ markdown = "*"
 blog = "*"
 pillow = "*"
 social-auth-app-django = "*"
+utils = "*"
