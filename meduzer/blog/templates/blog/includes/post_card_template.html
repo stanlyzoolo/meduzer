@@ -2,7 +2,7 @@
     <div class="card-header">
         <h5 class="card-title">{{ post.title }}</h5>
 
-        <p class="date">Опубликовано: {{ post.publish}}. Автор: {{ post.author }} </p>
+        <p class="date">Опубликовано: {{ post.publish}}. Автор: {{ post.author.first_name }} {{ post.author.last_name }} </p>
         {{ post.publish}}
     </div>
     <div class="card-body">

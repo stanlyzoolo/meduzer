@@ -8,7 +8,7 @@
 {% block content %}
     <h3 class="mb-5">Метки:</h3>
 
-    {% for tag in tags %}
+    {% for tag in object_list %}
         <h3><a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a></h3>
     {% endfor %}
 

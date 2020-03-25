@@ -21,7 +21,7 @@ from .models import Post, Tag
 #     query = forms.CharField()
 
 
-class TagForm(forms.Form):
+class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ["title", "slug"]
@@ -32,11 +32,12 @@ class TagForm(forms.Form):
         }
 
     def clean_slug(self):
+        # import pudb;pu.db
         new_slug = self.cleaned_data["slug"].lower()
 
         if new_slug == "create":
             raise ValidationError("Slug не может быть создан")
-        if Tag.objects.filter(slug_iexact=new_slug).count():
+        if Tag.objects.filter(slug__iexact=new_slug).count():
             raise ValidationError(
                 f"Slug должен быть уникальным. {new_slug} уже существует."
             )
@@ -46,14 +47,14 @@ class TagForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["author"]
-        fields = ["title", "slug", "body", "tags"]
+        fields = ["title", "slug", "body", "tags", "author"]
 
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "slug": forms.TextInput(attrs={"class": "form-control"}),
             "body": forms.Textarea(attrs={"class": "form-control"}),
             "tags": forms.SelectMultiple(attrs={"class": "form-control"}),
+            "author": forms.HiddenInput(),
         }
 
     def clean_slug(self):

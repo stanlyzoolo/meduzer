@@ -3,12 +3,18 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DetailView, ListView
 from django.views.generic.base import View
-from taggit.models import Tag
 
 from .forms import PostForm, TagForm
-from .models import Post
-from .utils import ObjectCreateMixin, ObjectDetailMixin
+from .models import Post, Tag
+from .utils import (
+    ObjectCreateMixin,
+    ObjectDetailMixin,
+    ObjectUpdateMixin,
+    ObjectDeleteMixin,
+)
 
 
 def posts_list(request):
@@ -49,6 +55,9 @@ def posts_list(request):
     return render(request, "blog/post/post_list.html", context=context)
 
 
+# Погуглить про modelview mixinview
+
+
 class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     model_form = PostForm
     template = "blog/post/post_create_form.html"
@@ -60,23 +69,23 @@ class PostDetail(ObjectDetailMixin, View):
     template = "blog/post/post_detail.html"
 
 
-class PostUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
+class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Post
     model_form = PostForm
     template = "blog/post/post_update_form.html"
     raise_exception = True
 
 
-class PostDelete(LoginRequiredMixin, ObjectCreateMixin, View):
+class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     model = Post
     template = "blog/post/post_delete_form.html"
-    redirect_url = "posts_list_url"
+    redirect_url = reverse_lazy("posts_list_url")
     raise_exception = True
 
 
-class TagDetail(ObjectCreateMixin, View):
+class TagDetail(DetailView):
     model = Tag
-    template = "blog/tags/tag_detail.html"
+    template_name = "blog/tags/tag_detail.html"
 
 
 class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
@@ -85,23 +94,23 @@ class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     raise_exception = True
 
 
-class TagUpdate(LoginRequiredMixin, ObjectCreateMixin, View):
+class TagUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Tag
     model_form = TagForm
     template = "blog/tags/tag_update_form.html"
     raise_exception = True
 
 
-class TagDelete(LoginRequiredMixin, ObjectCreateMixin, View):
+class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     model = Tag
     template = "blog/tags/tag_delete_form.html"
-    redirect_url = "tags_list_url"
+    redirect_url = reverse_lazy("tags_list_url")
     raise_exception = True
 
 
-def tags_list(request):
-    tags = Tag.objects.all()
-    return render(request, "blog/tags/tags_list.html", context={"tags": tags})
+class TagsView(ListView):
+    model = Tag
+    template_name = "blog/tags/tags_list.html"
 
 
 # def post_share(request, post_id):

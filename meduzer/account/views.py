@@ -72,3 +72,6 @@ def edit(request):
         "account/edit.html",
         {"user_form": user_form, "profile_form": profile_form},
     )
+
+
+# обернуть вьюхи в классы

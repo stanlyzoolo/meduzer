@@ -29,12 +29,14 @@ class ObjectCreateMixin:
         return render(request, self.template, context={"form": form})
 
     def post(self, request):
-        bound_form = self.model_form(request.POST)
+        # import pudb;pu.db
+
+        post_data = request.POST.copy()
+        post_data["author"] = request.user
+        bound_form = self.model_form(post_data)
 
         if bound_form.is_valid():
             new_obj = bound_form.save()
-            new_obj.author = request.user
-            new_obj.save()
             return redirect(new_obj)
         return render(request, self.template, context={"form": bound_form})
 
@@ -74,9 +76,9 @@ class ObjectDeleteMixin:
 
     def get(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
-        return render(request, self.template, context={self.model.name.lower(): obj})
+        return render(request, self.template, context={obj.title.lower(): obj})
 
     def post(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
         obj.delete()
-        return redirect(reverse(self.redirect_url))
+        return redirect(self.redirect_url)
