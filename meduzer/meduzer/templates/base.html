@@ -52,6 +52,7 @@
                             font-size: 15px;
                             margin-left: auto;
                             margin-top: 15px;
+                            text-align: right;
                         }
                     </style>
                     {% if request.user.is_authenticated %}
@@ -71,9 +72,10 @@
                     <span class="user">
                         {% if request.user.is_authenticated %}
                             Привет {{ request.user.first_name }},
-                            <a href="{% url "logout" %}">Выйти из учетной записи</a>
-                        {% else %}
-                            <a href="{% url "login" %}">Войти (обернуть в кнопку)</a>
+                            <a href="{% url "logout" %}">Выйти из учетной записи</a>                        
+                        {% else %}                            
+                            <a href="{% url "login" %}" class="btn btn-outline-dark" role="button" aria-pressed="true">Войти в учетную запись</a>
+                        
                         {% endif %}
                     </span>
                 </div>
@@ -101,7 +103,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'blog:posts_list_url' %}">В начало (не работатет)</a>
+                            <a class="nav-link" href="{% url 'blog:posts_list_url' %}">В начало</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">О проекте</a>

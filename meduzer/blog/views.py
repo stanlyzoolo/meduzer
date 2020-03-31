@@ -79,7 +79,7 @@ class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
 class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     model = Post
     template = "blog/post/post_delete_form.html"
-    redirect_url = reverse_lazy("posts_list_url")
+    redirect_url = reverse_lazy("blog:posts_list_url")
     raise_exception = True
 
 
