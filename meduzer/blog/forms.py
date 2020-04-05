@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from pagedown.widgets import PagedownWidget
 
 from .models import Post, Tag
 
@@ -45,6 +46,8 @@ class TagForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    body = forms.CharField(widget=PagedownWidget())
+
     class Meta:
         model = Post
         fields = ["title", "slug", "body", "tags", "author"]
@@ -52,7 +55,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "slug": forms.TextInput(attrs={"class": "form-control"}),
-            "body": forms.Textarea(attrs={"class": "form-control"}),
+            # "body": forms.Textarea(attrs={"class": "form-control"}),
             "tags": forms.SelectMultiple(attrs={"class": "form-control"}),
             "author": forms.HiddenInput(),
         }

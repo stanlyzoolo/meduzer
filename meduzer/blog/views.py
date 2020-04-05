@@ -1,10 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, UpdateView
 from django.views.generic.base import View
 
 from .forms import PostForm, TagForm
@@ -69,18 +69,27 @@ class PostDetail(ObjectDetailMixin, View):
     template = "blog/post/post_detail.html"
 
 
-class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
+class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     model_form = PostForm
-    template = "blog/post/post_update_form.html"
+    template_name = "blog/post/post_update_form.html"
+    fields = ["title", "body"]
     raise_exception = True
 
+    def test_func(self):
+        self.object = self.get_object()
+        return self.object.author == self.request.user
 
-class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
+
+class PostDelete(LoginRequiredMixin, UserPassesTestMixin, ObjectDeleteMixin, View):
     model = Post
     template = "blog/post/post_delete_form.html"
     redirect_url = reverse_lazy("blog:posts_list_url")
     raise_exception = True
+    # не работает почему то
+    def test_func(self):
+        self.object = self.get_object()
+        return self.object.author == self.request.user
 
 
 class TagDetail(DetailView):
@@ -94,14 +103,14 @@ class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     raise_exception = True
 
 
-class TagUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
+class TagUpdate(LoginRequiredMixin, UserPassesTestMixin, ObjectUpdateMixin, View):
     model = Tag
     model_form = TagForm
     template = "blog/tags/tag_update_form.html"
     raise_exception = True
 
 
-class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
+class TagDelete(LoginRequiredMixin, UserPassesTestMixin, ObjectDeleteMixin, View):
     model = Tag
     template = "blog/tags/tag_delete_form.html"
     redirect_url = reverse_lazy("tags_list_url")

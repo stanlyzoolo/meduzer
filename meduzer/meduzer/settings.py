@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "social_django",
+    "pagedown.apps.PagedownConfig",
 ]
 
 MIDDLEWARE = [
