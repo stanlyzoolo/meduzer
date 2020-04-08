@@ -15,7 +15,7 @@ urlpatterns = [
     # path('', redirect_blog),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
-    path("blog/", include("blog.urls")),
+    path("", include("blog.urls")),
     # path(
     #     "sitemap.xml",
     #     sitemap,
