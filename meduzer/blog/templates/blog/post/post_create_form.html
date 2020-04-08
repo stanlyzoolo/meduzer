@@ -9,14 +9,34 @@
     {{ form.media }}
     {% endblock mark_style %}
 
-
-
 {% block content %}
 
     <form  class="" action="{% url 'blog:post_create_url' %}" method="post">
 
         {% csrf_token %}
-
+        <style class="text/css">
+            .wmd-button-row {
+            background: white;
+            margin:-top: 1rem;
+            margin-bottom: 1rem;
+            margin-left:0;
+            margin-right:0;
+            }
+            .wmd-panel {
+            width: initial;
+            margin: 0;
+            }
+            .wmd-input {
+            background: white;
+            }
+            .form-group {
+            margin-top:20px;
+            }
+            .form-control {
+            margin-top:10px;
+            margin-bottom:20px;
+            }
+        </style>
         {% for field in form %}
             <div class="form-group">
                 {% if field.errors %}
@@ -28,6 +48,6 @@
                 {{ field }}
             </div>
         {% endfor %}
-        <button type="submit" name="button" class="btn btn-dark"> Опубликовать</button>
+        <button type="submit" name="button" class="btn btn-primary" style="margin-bottom: 20px;"> Опубликовать</button>
     </form>
 {% endblock %}

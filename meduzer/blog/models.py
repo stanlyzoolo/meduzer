@@ -13,13 +13,23 @@ def gen_slug(s):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=250, db_index=True)
+    title = models.CharField(
+        max_length=500,
+        db_index=True,
+        verbose_name="Заголовок публикации:",
+        help_text="Рекомендуется присваивать краткий и содержательный заголовок, несмотря на сложность используемых терминов.",
+    )
     slug = models.SlugField(max_length=250, unique=True)
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="blog_posts"
+        User,
+        on_delete=models.CASCADE,
+        related_name="blog_posts",
+        verbose_name="Автор - это Вы!)",
     )
-    body = models.TextField(blank=True, db_index=True)
-    tags = models.ManyToManyField("Tag", blank=True, related_name="posts")
+    body = models.TextField(blank=True, db_index=True, verbose_name="Основная часть")
+    tags = models.ManyToManyField(
+        "Tag", blank=True, related_name="posts", verbose_name="Присвойте метки:"
+    )
     publish = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
 
@@ -48,7 +58,7 @@ class Post(models.Model):
 #     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
 #     name = models.CharField(max_length=80)
 #     email = models.EmailField()
-#     body = models.TextField()
+#     body = models.TextField(verbose_name='Комментарий')
 #     created = models.DateTimeField(auto_now_add=True)
 #     updated = models.DateTimeField(auto_now=True)
 #     active = models.BooleanField(default=True)

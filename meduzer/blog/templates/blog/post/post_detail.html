@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
-
+{% load blog_tags %}
 {% block title %}
     {{ post.title }} - {{ block.super }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="mt-5">
-        {{ post.title }}
-    </h1>
-    <p>
-        {{ post.body }}
-    </p>
+    <div class="card">
+            <img src="https://img3.goodfon.ru/original/1920x1080/9/df/nastroeniya-kniga-knizhka.jpg" class="card-img-top" style="height:300px">
+        <h3 class="card-header">{{ post.title }}</h3>
+
+        <div class="card-body">
+<!--        <h5 class="card-title">Специальный заголовок</h5>-->
+            <p class="card-text">{{ post.body|markdown }}</p>
+<!--        <a href="#" class="btn btn-primary">Переход куда-нибудь</a>-->
+         </div>
+        <div class="card-footer text-muted">
+            <p class="text-muted" style="font-size:14px; margin-bottom:0px"><i class="fas fa-id-card-alt"></i> Автор: {{ post.author.first_name }} {{ post.author.last_name }}</p>
+            <p class="text-muted" style="font-size:14px; margin-bottom:0px"><i class="far fa-calendar-alt"></i> Опубликовано: {{ post.publish}}</p>
+            <i class="fas fa-tags"></i>
+            Связанные метки:
+            {% for tag in post.tags.all %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

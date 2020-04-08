@@ -123,7 +123,7 @@ class TagsView(ListView):
 
 
 # def post_share(request, post_id):
-#     post = get_object_or_404(Post, id=post_id)
+#     post = get_object_or_404(Post, id=post_id, status='publish')
 #     sent = False
 #     if request.method == "POST":
 #         form = EmailPostForm(request.POST)

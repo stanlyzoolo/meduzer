@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:blog="http://www.w3.org/1999/xhtml">
 
 <head>
     <!-- Required meta tags -->
@@ -15,7 +15,7 @@
 
 </head>
 <header>
-       <div class='container shadow p-0 mb-0 bg-white rounded'>
+       <div class='container-lg shadow p-0 mb-0 bg-white rounded'>
            <div class="row" style="margin-left: 0px;padding-left: 5px;padding-top: 5px;padding-right: 5px;padding-bottom: 5px;margin-right: 0px;">
                 <div class="col-m">
                     <style>
@@ -23,7 +23,7 @@
                             text-align: center;
                             font-size: 5rem;
                             color: white;
-                            background-color: #343a40;
+                            background-color: #555;
                             font-family: Georgia, 'Times New Roman', Times, serif;
                             margin-top: 15px;
                             margin-bottom: 15px;
@@ -37,6 +37,7 @@
                     <style>
                         .col-md-auto {
                             text-align: center;
+                            color:#555;
                             font-family: Georgia, 'Times New Roman', Times, serif;
                             font-size: 5rem;
                             margin-top: 15px;
@@ -58,6 +59,12 @@
                             text-align: right;
                         }
                     </style>
+                    <form class="navbar-form form-inline" action="{% url 'blog:posts_list_url' %}">
+                        <div class="input-group search-box">
+                            <input type="text" id="search" class="form-control" placeholder="Найдется всё!">
+                            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+                        </div>
+                    </form>
                 </div>
            </div>
        </div>
@@ -204,13 +211,12 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
-	<!-- Collection of nav links, forms, and other content for toggling -->
                 <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
                     <ul class="nav navbar-nav">
-                        <li class="nav-item active"><a href="#" class="nav-link">Домой</a></li>
+                        <li class="nav-item active"><a href="{% url 'blog:posts_list_url' %}" class="nav-link" style="color:#555;">Домой</a></li>
                         <li class="nav-item"><a href="https://www.msdmanuals.com/ru/%D0%B4%D0%BE%D0%BC%D0%B0" class="nav-link">База знаний MSD</a></li>
                         <li class="nav-item dropdown">
-                            <a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Будет полезно<b class="caret"></b></a>
+                            <a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Полезно<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/" class="dropdown-item">PubMed</a></li>
                                 <li><a href="https://www.medscape.com/" class="dropdown-item">Medscope</a></li>
@@ -221,17 +227,13 @@
 <!--                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>-->
 <!--                        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>-->
                     </ul>
-                    <form class="navbar-form form-inline" action="{% url 'blog:posts_list_url' %}">
-                        <div class="input-group search-box">
-                            <input type="text" id="search" class="form-control" placeholder="Найдется всё!">
-                            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
-                        </div>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right ml-auto">
-                        <li class="nav-item"><a href="#" class="nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge"></span></a></li>
-                        <li class="nav-item"><a href="#" class="nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge"></span></a></li>
 
+                    <ul class="nav navbar-nav navbar-right ml-auto">
                         {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="{% url "blog:post_create_url" %}" class="btn btn-primary btn-sm mt-1" role="button" style="margin-right: 20px;margin-left: 20px;">Создать публикацию</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a href="{% url "dashboard" %}" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="https://avatars3.githubusercontent.com/u/51911715?s=460&u=00e4b271646e2e2cb79c33f154cb0d5e55667bdb&v=4" class="avatar rounded-circle" alt="Avatar"> {{ request.user.first_name }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -262,14 +264,15 @@
         </div>
     </div>
     <div class="container-lg shadow p-0 mb-0 bg-white rounded">
-        <div class="row">
+        <div class="row" style="margin-left:0px; margin-right:0px;">
             <style>
                 .row {
                     padding: 15px
+
                 }
             </style>
 
-            <div class="col-md-9 shadow rounded">
+            <div class="col-md-9 shadow rounded" style="margin-top: 30px; color:#555;">
                 {% block content %}
 
                 {% endblock %}
@@ -302,9 +305,7 @@
 
                 {% endif %}
             </div>
-            <div class="col-md shadow rounded" style="margin-left: 15px">
-
-
+            <div class="col-md shadow rounded" style="margin-top: 30px; margin-left: 15px">
             </div>
         </div>
     </div>
@@ -315,15 +316,4 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<!--    <script type="text/javascript">-->
-<!--        $(document).ready(function(){-->
-<!--            $(".content-markdown").each(function){-->
-<!--                var content = $(this).text()-->
-<!--                console.log(content)-->
-<!--                var markedContent = marked(content)-->
-<!--                console.log(markedContent)-->
-<!--                $(this).html(markedContent)-->
-<!--            })-->
-<!--        })-->
-<!--    </script>-->
 </body>
