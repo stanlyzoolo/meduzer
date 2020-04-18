@@ -11,12 +11,19 @@ from .models import Post, Tag
 #     to = forms.EmailField()
 #     comments = forms.CharField(required=False, widget=forms.Textarea)
 
-
+#
 # class CommentForm(forms.ModelForm):
 #     class Meta:
 #         model = Comment
 #         fields = ("body",)
-
+#
+#     def save(self, commit=True):
+#         comment = super(CommentForm, self).save(commit=False)
+#         comment.content = self.cleaned_data['body']
+#
+#         if commit:
+#             comment.save()
+#         return comment
 
 # class SearchForm(forms.Form):
 #     query = forms.CharField()

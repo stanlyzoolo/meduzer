@@ -67,6 +67,7 @@ class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
 class PostDetail(ObjectDetailMixin, View):
     model = Post
     template = "blog/post/post_detail.html"
+    redirect_url = reverse_lazy("blog:post_detail_url")
 
 
 class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -86,6 +87,7 @@ class PostDelete(LoginRequiredMixin, UserPassesTestMixin, ObjectDeleteMixin, Vie
     template = "blog/post/post_delete_form.html"
     redirect_url = reverse_lazy("blog:posts_list_url")
     raise_exception = True
+
     # не работает почему то
     def test_func(self):
         self.object = self.get_object()
@@ -120,6 +122,15 @@ class TagDelete(LoginRequiredMixin, UserPassesTestMixin, ObjectDeleteMixin, View
 class TagsView(ListView):
     model = Tag
     template_name = "blog/tags/tags_list.html"
+
+
+# def index(request):
+#     context = {
+#         'posts': Post.objects.order_by('-date')
+#         if request.user.is_authenticated else []
+#     }
+#
+#     return render(request, 'blog: base.html', context)
 
 
 # def post_share(request, post_id):

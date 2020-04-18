@@ -55,19 +55,22 @@ class Post(models.Model):
 
 
 # class Comment(models.Model):
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-#     name = models.CharField(max_length=80)
-#     email = models.EmailField()
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", verbose_name='Комментарии')
+#     # name = models.CharField(max_length=80)
+# email = models.EmailField()
+#     author = models.ForeignKey(User, related_name="comment_author", on_delete=models.CASCADE, verbose_name="Автор")
 #     body = models.TextField(verbose_name='Комментарий')
-#     created = models.DateTimeField(auto_now_add=True)
-#     updated = models.DateTimeField(auto_now=True)
+#     created = models.DateTimeField("Опубликовано", auto_now_add=True)
+#     updated = models.DateTimeField("Обновлено", auto_now=True)
 #     active = models.BooleanField(default=True)
 #
 #     class Meta:
 #         ordering = ("created",)
+#         verbose_name='Комментарий'
+#         verbose_name_plural="Комментарии"
 #
 #     def __str__(self):
-#         return "Комментарий от {} к публикации {}".format(self.name, self.post)
+#         return f"Комментарий от {self.author} к публикации {self.post}"
 
 
 class Tag(models.Model):

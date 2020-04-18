@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "social_django",
     "pagedown.apps.PagedownConfig",
     "django_comments",
+    "avatar",
 ]
 
 MIDDLEWARE = [
@@ -136,16 +137,19 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_REDIRECT_URL = reverse_lazy("blog:posts_list_url")
 LOGOUT_REDIRECT_URL = reverse_lazy("blog:posts_list_url")
-LOGIN_URL = "login"
+LOGIN_URL = "/auth/login/google-oauth2/"
 LOGOUT_URL = "logout"
 
 AUTHENTICATION_BACKENDS = [
+    "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.google.GooglePlusAuth",
     "django.contrib.auth.backends.ModelBackend",
     "account.authentication.EmailAuthBackend",
     "social_core.backends.facebook.FacebookOAuth2",
     "social_core.backends.twitter.TwitterOAuth",
-    "social_core.backends.google.GoogleOAuth2",
 ]
+
+SOCIAL_AUTH_URL_NAMESPACE = "social"
 
 SOCIAL_AUTH_FACEBOOK_KEY = ""  # Facebook App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = ""  # Facebook App Secret
@@ -156,3 +160,16 @@ SOCIAL_AUTH_TWITTER_SECRET = ""  # Twitter Consumer Secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "24495659287-drg0reeimn3t0amg9l13fi519triut2g.apps.googleusercontent.com"  # Google Consumer Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "-Bchsx7-U1qpsP_NbPjy6dAc"  # Google Consumer Secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+]
+SOCIAL_AUTH_GOOGLE_PLUS_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_PLUS_SCOPE = [
+    "https://www.googleapis.com/auth/plus.login",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API = True
+SOCIAL_AUTH_GOOGLE_PLUS_USE_DEPRECATED_API = True

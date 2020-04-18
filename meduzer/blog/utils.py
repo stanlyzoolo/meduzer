@@ -6,6 +6,7 @@ from .models import *
 class ObjectDetailMixin:
     model = None
     template = None
+    redirect_url = None
 
     def get(self, request, slug):
         obj = get_object_or_404(self.model, slug__iexact=slug)

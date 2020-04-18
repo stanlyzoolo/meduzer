@@ -1,4 +1,5 @@
-from django.urls import path
+from django.conf.urls import url
+from django.urls import path, include
 
 from .views import *
 
@@ -18,4 +19,5 @@ urlpatterns = [
     path("tags/<str:slug>/", TagDetail.as_view(), name="tag_detail_url"),
     path("tags/<str:slug>/update/", TagUpdate.as_view(), name="tag_update_url"),
     path("tags/<str:slug>/delete/", TagDelete.as_view(), name="tag_delete_url"),
+    url(r"^comments/", include("django_comments.urls")),
 ]

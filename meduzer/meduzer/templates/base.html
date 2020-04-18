@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load avatar_tags %}
 <html lang="en" xmlns:blog="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -10,6 +11,8 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://kit.fontawesome.com/400d095706.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
     <title>{% block title %}Medbrain{% endblock %}</title>
     {% block mark_style %} {% endblock mark_style %}
 
@@ -235,10 +238,14 @@
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a href="{% url "dashboard" %}" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="https://avatars3.githubusercontent.com/u/51911715?s=460&u=00e4b271646e2e2cb79c33f154cb0d5e55667bdb&v=4" class="avatar rounded-circle" alt="Avatar"> {{ request.user.first_name }} <b class="caret"></b></a>
+
+                                <a href="{% url "dashboard" %}" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"> {% avatar user 65 class="img-circle img-responsive" id="user_avatar" %} {{ request.user.first_name }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li {% if section == "edit" %}class="selected"{% endif %}>
+                                    <li {% if section == "edit" %} class="selected"{% endif %}>
                                         <a href="{% url "dashboard" %}" class="dropdown-item"><i class="fa fa-user-o"></i>Профиль</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'avatar_change' %}" class="dropdown-item"><i class="fa fa-user-circle"></i> Сменить аватар</a>
                                     </li>
                                     <li>
                                         <a href="#" class="dropdown-item"><i class="fa fa-calendar-o"></i>Мои публикации</a>
