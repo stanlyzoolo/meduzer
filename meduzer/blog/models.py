@@ -74,8 +74,10 @@ class Post(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True)
+    title = models.CharField(max_length=100, verbose_name="Название метки")
+    slug = models.SlugField(
+        max_length=100, unique=True, verbose_name="In english, please"
+    )
 
     # Функция используется для получения ссылки (каноническая ссылка - соглашение Джанго) на объект
     def get_absolute_url(self):

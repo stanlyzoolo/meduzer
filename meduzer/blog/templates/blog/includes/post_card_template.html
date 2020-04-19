@@ -1,4 +1,6 @@
 {% load blog_tags %}
+{% load comments %}
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class="card mb-2">
     <div class="card-header">
@@ -11,13 +13,16 @@
         <p class="text-justify" style="font-size:18px;">{{ post.body|markdown|truncatewords:50 }}</p>
         <a href="{{ post.get_absolute_url }}" class="btn btn-success float-right">Читать</a>
     </div>
-    <div class="card-footer text-muted">
+    <div class="card-footer text-muted" style="font-size: 14px;">
         <i class="fas fa-tags"></i>
         Связанные метки:
         {% for tag in post.tags.all %}
             <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
         {% endfor %}
-        <small class="text-muted cat float-right"><i class="fas fa-cocktail"></i> Время чтения: 30 minutes </small>
+        <p class="text-muted float-right"><i class="fas fa-cocktail"></i> Время чтения: 30 minutes </p>
+        <br/>
+        <p class="text-muted" style="font-size:14px; margin-bottom:0px"><i class="far fa-comments"></i> {% get_comment_count for post as comment_count %}Комментариев: {{ comment_count }}</p>
+
     </div>
 </div>
 

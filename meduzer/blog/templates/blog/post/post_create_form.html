@@ -48,6 +48,7 @@
                 {{ field }}
             </div>
         {% endfor %}
-        <button type="submit" name="button" class="btn btn-primary" style="margin-bottom: 20px;"> Опубликовать</button>
+        <button type="submit" name="button" class="btn btn-primary btn-sm" style="margin-bottom: 20px;"> Опубликовать</button>
+        <a href="{% url 'blog:tag_create_url' %}" type="submit" name="button" class="btn btn-warning btn-sm float-right" style="margin-bottom: 20px;"> Создать метку</a>
     </form>
 {% endblock %}

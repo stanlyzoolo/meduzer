@@ -73,7 +73,7 @@
        </div>
 </header>
 <body style="background: gainsboro">
-    <div class="row" style="padding-top: 3px; padding-bottom: 3px;">
+    <div class="row" style="padding-top: 3px; padding-bottom: 3px; margin: 0px;">
         <div class="container-lg shadow p-0 mb-0 bg-white rounded">
             <style type="text/css">
                 body{
@@ -274,17 +274,13 @@
         <div class="row" style="margin-left:0px; margin-right:0px;">
             <style>
                 .row {
-                    padding: 15px
-
+                    padding: 15px;
                 }
             </style>
-
-            <div class="col-md-9 shadow rounded" style="margin-top: 30px; color:#555;">
+            <div class="col-lg shadow rounded" style="margin-top: 30px; color:#555;">
                 {% block content %}
-
                 {% endblock %}
                 {% if is_paginated %}
-
                     <nav aria-label="...">
                         <ul class="pagination">
                             <li class="page-item {% if not prev_url %} disabled {% endif %}">
@@ -309,16 +305,10 @@
                             </li>
                         </ul>
                     </nav>
-
                 {% endif %}
-            </div>
-            <div class="col-md shadow rounded" style="margin-top: 30px; margin-left: 15px">
             </div>
         </div>
     </div>
-    <footer>
-
-    </footer>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

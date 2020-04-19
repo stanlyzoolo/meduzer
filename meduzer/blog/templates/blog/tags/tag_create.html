@@ -5,10 +5,8 @@
 {% endblock %}
 
 {% block content %}
-
     <form action="{% url 'blog:tag_create_url' %}" method="post">
         {% csrf_token %}
-
         {% for field in form %}
             <div class="form-group">
                 {% if field.errors %}
@@ -16,15 +14,10 @@
                         {{ field.errors }}
                     </div>
                 {% endif %}
-
                 {{ field.label }}
                 {{ field }}
             </div>
-
         {% endfor %}
-
-        <button type="submit" class="btn btn-primary">Создать метку</button>
+        <button type="submit" class="btn btn-primary btn-sm" style="margin-bottom:20px;">Создать метку</button>
     </form>
-
-
 {% endblock %}
