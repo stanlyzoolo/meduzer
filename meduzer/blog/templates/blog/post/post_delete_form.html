@@ -6,15 +6,10 @@
 
 
  {% block content %}
-
     <form action="{{ post.get_delete_url }}" method="post">
         {% csrf_token %}
-
-        <h3>Вы действительно хотите удалить публикацию: <b>"{{ post.title|title }}"?</b></h3>
+        <h4>Вы действительно хотите удалить публикацию: <b>"{{ post.title|title }}"?</b></h4>
         <a href="{{ post.get_absolute_url }}">Отменить</a>
-        <button type="submit" name="button" class="btn btn-danger">Удалить</button>
-
+        <button type="submit" name="button" class="btn btn-danger btn-sm">Удалить</button>
     </form>
-
-
  {% endblock %}

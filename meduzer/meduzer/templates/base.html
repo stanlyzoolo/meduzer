@@ -62,10 +62,9 @@
                             text-align: right;
                         }
                     </style>
-                    <form class="navbar-form form-inline" action="{% url 'blog:posts_list_url' %}">
+                    <form class="navbar-form form-inline" action="{% url 'blog:search_results' %}" method="get">
                         <div class="input-group search-box">
-                            <input type="text" id="search" class="form-control" placeholder="Найдется всё!">
-                            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+                            <input type="text" name="q" id="search" class="form-control" placeholder="Найдется всё!">
                         </div>
                     </form>
                 </div>

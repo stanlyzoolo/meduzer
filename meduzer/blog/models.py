@@ -1,35 +1,57 @@
-from time import time
-
-from django.utils.text import slugify
-from django.db import models
-from django.utils import timezone
+from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.contrib.postgres.indexes import GinIndex
+from django.db import models
 from django.urls import reverse
-
-
-def gen_slug(s):
-    new_slug = slugify(s, allow_unicode=True)
-    return new_slug + "-" + str(int(time()))
+from django.utils import timezone
+from django.utils.text import slugify
 
 
 class Post(models.Model):
-    title = models.CharField(
-        max_length=500,
-        db_index=True,
-        verbose_name="Заголовок публикации:",
-        help_text="Рекомендуется присваивать краткий и содержательный заголовок, несмотря на сложность используемых терминов.",
-    )
-    slug = models.SlugField(max_length=250, unique=True)
+    DoesNotExist = None
     author = models.ForeignKey(
-        User,
+        "auth.User",
         on_delete=models.CASCADE,
+        verbose_name="Авторство",
         related_name="blog_posts",
-        verbose_name="Автор - это Вы!)",
+        related_query_name="post",
     )
-    body = models.TextField(blank=True, db_index=True, verbose_name="Основная часть")
-    tags = models.ManyToManyField(
-        "Tag", blank=True, related_name="posts", verbose_name="Присвойте метки:"
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        unique=True,
+        db_index=True,
+        help_text=True,
+        null=False,
     )
+    slug = models.SlugField(
+        max_length=150,
+        unique=True,
+        blank=True,
+        null=True,
+        db_index=True,
+        allow_unicode=True,
+        unique_for_date="publish",
+    )
+    post_subject = models.CharField(
+        max_length=255, blank=False, null=False, db_index=True, default=""
+    )
+    annotation = models.TextField(max_length=600, blank=True, null=True, db_index=True)
+    post_keywords = models.CharField(
+        max_length=100, blank=True, null=True, db_index=True
+    )
+    body = models.TextField(
+        blank=True, null=True, db_index=True, verbose_name="Основная часть"
+    )
+    findings = models.CharField(max_length=600, blank=True, null=True, db_index=True)
+    bibliography = models.CharField(
+        max_length=600, blank=True, null=True, db_index=True
+    )
+    # tags = models.ManyToManyField(
+    #     "Tag", blank=True, null=True, related_name="posts", verbose_name="Присвойте метки:"
+    # )
     publish = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
 
@@ -43,15 +65,27 @@ class Post(models.Model):
         return reverse("blog:post_delete_url", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.slug = gen_slug(self.title)
-        super().save(*args, **kwargs)
+        super(Post, self).save()
+        if not self.slug:
+            slug = slugify(self.title)
+            try:
+                post_obj = Post.objects.get(slug=slug)
+                slug += "-" + str(self.id)
+            except Post.DoesNotExist:
+                pass
+            self.slug = slug
+            self.save()
 
     class Meta:
         ordering = ("-publish",)
+        indexes = [
+            GinIndex(fields=["title"], name="gin_trgm_idx", opclasses=["gin_trgm_ops"])
+        ]
+        verbose_name = "Публикация"
+        verbose_name_plural = "Публикации"
 
     def __str__(self):
-        return self.title
+        return f"{self.title}"
 
 
 # class Comment(models.Model):

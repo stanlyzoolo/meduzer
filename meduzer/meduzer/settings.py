@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
+    "django.contrib.postgres",
     "taggit",
     "django.contrib.sites",
     "django.contrib.sitemaps",
@@ -129,8 +130,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "MEDIA")
 STATICFILES_DIRS = [PROJECT_DIR / "static"]
 
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "stanlyzoolo@gmail.com"
-EMAIL_HOST_PASSWORD = "vovka51088"
+EMAIL_HOST_USER = _settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = _settings.EMAIL_HOST_PASSWORD
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

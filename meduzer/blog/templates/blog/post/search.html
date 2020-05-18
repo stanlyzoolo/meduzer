@@ -10,13 +10,13 @@
           Найдено: {{ total_results }} {{ total_results|pluralize }}
       {% endwith %}
     </h3>
-    {% for post in results %}
+    {% for post in object_list %}
         <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
         {{ post.body|truncatewords:5 }}
     {% empty %}
       <p>По Вашему запросу ничего не найдено.</p>
     {% endfor %}
-    <p><a href="{% url 'blog:post_search' %}">Искать далее</a></p>
+    <p><a href="{% url 'blog:search_results' %}">Искать далее</a></p>
   {% else %}
     <h1>Поиск публикаций</h1>
     <form action="." method="get">

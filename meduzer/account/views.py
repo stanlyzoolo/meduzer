@@ -74,4 +74,5 @@ def edit(request):
     )
 
 
+# class RegistrationModel()
 # обернуть вьюхи в классы

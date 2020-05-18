@@ -14,7 +14,13 @@
 
         <div class="card-body">
 <!--        <h5 class="card-title">Специальный заголовок</h5>-->
+
+            <p class="card-text">{{ post.post_subject|markdown }}</p>
+            <p class="annotation">{{ post.annotation|markdown }}</p>
+            <p class="card-text">{{ post.post_keywords|markdown }}</p>
             <p class="card-text">{{ post.body|markdown }}</p>
+            <p class="card-text">{{ post.findings|markdown }}</p>
+            <p class="card-text">{{ post.bibliography|markdown }}</p>
 <!--        <a href="#" class="btn btn-primary">Переход куда-нибудь</a>-->
          </div>
         <div class="card-footer text-muted">
@@ -31,8 +37,8 @@
 <!--            Редактирование и удаление публикации надо привязать к почте-->
             {% if user.is_authenticated %}
                 {% if post.author.last_name == user.last_name %}
-                    <a href="{% url 'blog:post_delete_url' post.id %}" type="submit" name="button" class="btn btn-outline-danger btn-sm float-right" style="margin-left:10px"> Удалить</a>
-                    <a href="{% url 'blog:post_update_url' post.id %}" type="submit" name="button" class="btn btn-outline-info btn-sm float-right" style=""> Редактировать</a>
+                    <a href="{% url 'blog:post_delete_url' post.slug %}" type="submit" name="button" class="btn btn-outline-danger btn-sm float-right" style="margin-left:10px"> Удалить</a>
+                    <a href="{% url 'blog:post_update_url' post.slug %}" type="submit" name="button" class="btn btn-outline-info btn-sm float-right" style=""> Редактировать</a>
                 {% endif %}
             {% endif %}
         </div>
