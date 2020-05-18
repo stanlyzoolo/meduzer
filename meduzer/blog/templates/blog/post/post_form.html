@@ -12,7 +12,6 @@
 {% block content %}
 
     <form  class="" action="{% url 'blog:post_create_url' %}" method="post">
-
         {% csrf_token %}
         <style class="text/css">
             .wmd-button-row {
@@ -37,15 +36,14 @@
             margin-bottom:20px;
             }
         </style>
+
         {% for field in form %}
-            <div class="form-group">
-                {% if field.errors %}
-                    <div class="alert alert-danger">
-                        {{ field.errors }}
-                    </div>
+            <div class="=fieldWrapper">
+                {{ field.errors }}
+                {{ field.label }} {{ field }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
                 {% endif %}
-                {{ field.label }}
-                {{ field }}
             </div>
         {% endfor %}
         <button type="submit" name="button" class="btn btn-primary btn-sm" style="margin-bottom: 20px;"> Опубликовать</button>
